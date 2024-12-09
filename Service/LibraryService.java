@@ -27,15 +27,15 @@ public class LibraryService implements LibraryServiceInterface {
     }
 
     @Override
-    public boolean borrowBook(String idAnggota, String idBuku) {
+    public String borrowBook(String idAnggota, String idBuku) {
         Optional<Entities.Buku> buku = repository.findBukuById(idBuku);
         if (buku.isPresent() && buku.get().getStok() > 0) {
             String idPeminjaman = "P" + (repository.getPeminjaman().size() + 1);
             repository.addPeminjaman(new Entities.Peminjaman(idPeminjaman, idAnggota, idBuku, new Date()));
             buku.get().pinjam();
-            return true;
+            return idPeminjaman;
         }
-        return false;
+        return null;
     }
 
     @Override
